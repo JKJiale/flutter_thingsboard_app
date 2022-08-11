@@ -11,18 +11,17 @@ import 'package:thingsboard_app/widgets/tb_progress_indicator.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
 class ProfilePage extends TbPageWidget {
-
   final bool _fullscreen;
 
-  ProfilePage(TbContext tbContext, {bool fullscreen = false}) : _fullscreen = fullscreen, super(tbContext);
+  ProfilePage(TbContext tbContext, {bool fullscreen = false})
+      : _fullscreen = fullscreen,
+        super(tbContext);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
-
 }
 
 class _ProfilePageState extends TbPageState<ProfilePage> {
-
   final _isLoadingNotifier = ValueNotifier<bool>(true);
 
   final _profileFormKey = GlobalKey<FormBuilderState>();
@@ -46,24 +45,19 @@ class _ProfilePageState extends TbPageState<ProfilePage> {
         backgroundColor: Colors.white,
         appBar: TbAppBar(
           tbContext,
-          title: const Text('Profile'),
+          title: const Text('个人档案'), //Profile
           actions: [
             IconButton(
-                icon: Icon(
-                    Icons.check
-                ),
+                icon: Icon(Icons.check),
                 onPressed: () {
                   _saveProfile();
-                }
-            ),
-            if (widget._fullscreen) IconButton(
-              icon: Icon(
-                  Icons.logout
-              ),
-              onPressed: () {
-                tbClient.logout();
-              }
-            )
+                }),
+            if (widget._fullscreen)
+              IconButton(
+                  icon: Icon(Icons.logout),
+                  onPressed: () {
+                    tbClient.logout();
+                  })
           ],
         ),
         body: Stack(
@@ -72,73 +66,64 @@ class _ProfilePageState extends TbPageState<ProfilePage> {
               child: Padding(
                   padding: EdgeInsets.all(16),
                   child: SingleChildScrollView(
-                    child: FormBuilder(
-                      key: _profileFormKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            SizedBox(height: 16),
-                            FormBuilderTextField(
-                              name: 'email',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context, errorText: 'Email is required.'),
-                                FormBuilderValidators.email(context, errorText: 'Invalid email format.')
-                              ]),
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Email *'
-                              ),
-                            ),
-                            SizedBox(height: 24),
-                            FormBuilderTextField(
-                              name: 'firstName',
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'First Name'
-                              ),
-                            ),
-                            SizedBox(height: 24),
-                            FormBuilderTextField(
-                              name: 'lastName',
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Last Name'
-                              ),
-                            ),
-                            SizedBox(height: 24),
-                            OutlinedButton(
-                                style: OutlinedButton.styleFrom(padding: EdgeInsets.all(16),
-                                    alignment: Alignment.centerLeft),
-                                onPressed: () {
-                                  _changePassword();
-                                },
-                                child: Center(child: Text('Change Password'))
-                            )
-                          ]
-                      ),
-                    )
-                  )
-              ),
+                      child: FormBuilder(
+                    key: _profileFormKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: 16),
+                          FormBuilderTextField(
+                            name: 'email',
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: 'Email is required.'),
+                              FormBuilderValidators.email(context,
+                                  errorText: 'Invalid email format.')
+                            ]),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Email *'),
+                          ),
+                          SizedBox(height: 24),
+                          FormBuilderTextField(
+                            name: 'firstName',
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(), labelText: '姓'),
+                          ),
+                          SizedBox(height: 24),
+                          FormBuilderTextField(
+                            name: 'lastName',
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(), labelText: '名'),
+                          ),
+                          SizedBox(height: 24),
+                          OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.all(16),
+                                  alignment: Alignment.centerLeft),
+                              onPressed: () {
+                                _changePassword();
+                              },
+                              child: Center(child: Text('更改密码')))
+                        ]),
+                  ))),
             ),
             ValueListenableBuilder<bool>(
                 valueListenable: _isLoadingNotifier,
                 builder: (BuildContext context, bool loading, child) {
-                    if (loading) {
-                      return SizedBox.expand(
+                  if (loading) {
+                    return SizedBox.expand(
                         child: Container(
-                          color: Color(0x99FFFFFF),
-                          child: Center(child: TbProgressIndicator(size: 50.0)),
-                        )
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                }
-            )
+                      color: Color(0x99FFFFFF),
+                      child: Center(child: TbProgressIndicator(size: 50.0)),
+                    ));
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                })
           ],
-        )
-    );
+        ));
   }
 
   Future<void> _loadUser() async {
@@ -170,15 +155,18 @@ class _ProfilePageState extends TbPageState<ProfilePage> {
         _setUser();
         await Future.delayed(Duration(milliseconds: 300));
         _isLoadingNotifier.value = false;
-        showSuccessNotification('Profile successfully updated', duration: Duration(milliseconds: 1500));
+        showSuccessNotification('Profile successfully updated',
+            duration: Duration(milliseconds: 1500));
       }
     }
   }
 
   _changePassword() async {
-    var res = await tbContext.showFullScreenDialog<bool>(new ChangePasswordPage(tbContext));
+    var res = await tbContext
+        .showFullScreenDialog<bool>(new ChangePasswordPage(tbContext));
     if (res == true) {
-      showSuccessNotification('Password successfully changed', duration: Duration(milliseconds: 1500));
+      showSuccessNotification('Password successfully changed',
+          duration: Duration(milliseconds: 1500));
     }
   }
 }

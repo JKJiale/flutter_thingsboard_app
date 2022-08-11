@@ -1,5 +1,4 @@
 import 'package:universal_platform/universal_platform.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,13 +7,11 @@ import 'package:thingsboard_app/config/routes/router.dart';
 import 'package:thingsboard_app/core/context/tb_context.dart';
 import 'package:thingsboard_app/modules/dashboard/main_dashboard_page.dart';
 import 'package:thingsboard_app/widgets/two_page_view.dart';
-
 import 'config/themes/tb_theme.dart';
 
 final appRouter = ThingsboardAppRouter();
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 //  await FlutterDownloader.initialize();
 //  await Permission.storage.request();
@@ -27,18 +24,18 @@ void main() async {
 }
 
 class ThingsboardApp extends StatefulWidget {
-
   ThingsboardApp({Key? key}) : super(key: key);
 
   @override
   ThingsboardAppState createState() => ThingsboardAppState();
-
 }
 
-class ThingsboardAppState extends State<ThingsboardApp> with TickerProviderStateMixin implements TbMainDashboardHolder {
-
+class ThingsboardAppState extends State<ThingsboardApp>
+    with TickerProviderStateMixin
+    implements TbMainDashboardHolder {
   final TwoPageViewController _mainPageViewController = TwoPageViewController();
-  final MainDashboardPageController _mainDashboardPageController = MainDashboardPageController();
+  final MainDashboardPageController _mainDashboardPageController =
+      MainDashboardPageController();
 
   final GlobalKey mainAppKey = GlobalKey();
   final GlobalKey dashboardKey = GlobalKey();
@@ -50,8 +47,13 @@ class ThingsboardAppState extends State<ThingsboardApp> with TickerProviderState
   }
 
   @override
-  Future<void> navigateToDashboard(String dashboardId, {String? dashboardTitle, String? state, bool? hideToolbar, bool animate = true}) async {
-    await _mainDashboardPageController.openDashboard(dashboardId, dashboardTitle: dashboardTitle, state: state, hideToolbar: hideToolbar);
+  Future<void> navigateToDashboard(String dashboardId,
+      {String? dashboardTitle,
+      String? state,
+      bool? hideToolbar,
+      bool animate = true}) async {
+    await _mainDashboardPageController.openDashboard(dashboardId,
+        dashboardTitle: dashboardTitle, state: state, hideToolbar: hideToolbar);
     _openDashboard(animate: animate);
   }
 
@@ -121,40 +123,36 @@ class ThingsboardAppState extends State<ThingsboardApp> with TickerProviderState
     return res;
   }
 
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
         statusBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.light
-    ));
+        systemNavigationBarIconBrightness: Brightness.light));
     return MaterialApp(
-      title: 'ThingsBoard',
+        title: '海容物联网',
         themeMode: ThemeMode.light,
         home: TwoPageView(
-          controller: _mainPageViewController,
-          first: MaterialApp(
-            key: mainAppKey,
-            scaffoldMessengerKey: appRouter.tbContext.messengerKey,
-            title: 'ThingsBoard',
-            theme: tbTheme,
-            themeMode: ThemeMode.light,
-            darkTheme: tbDarkTheme,
-            onGenerateRoute: appRouter.router.generator,
-            navigatorObservers: [appRouter.tbContext.routeObserver],
-          ),
-          second: MaterialApp(
-            key: dashboardKey,
-            // scaffoldMessengerKey: appRouter.tbContext.messengerKey,
-            title: 'ThingsBoard',
-            theme: tbTheme,
-            themeMode: ThemeMode.light,
-            darkTheme: tbDarkTheme,
-            home: MainDashboardPage(appRouter.tbContext, controller: _mainDashboardPageController),
-          )
-        )
-    );
+            controller: _mainPageViewController,
+            first: MaterialApp(
+              key: mainAppKey,
+              scaffoldMessengerKey: appRouter.tbContext.messengerKey,
+              title: '海容物联网',
+              theme: tbTheme,
+              themeMode: ThemeMode.light,
+              darkTheme: tbDarkTheme,
+              onGenerateRoute: appRouter.router.generator,
+              navigatorObservers: [appRouter.tbContext.routeObserver],
+            ),
+            second: MaterialApp(
+              key: dashboardKey,
+              // scaffoldMessengerKey: appRouter.tbContext.messengerKey,
+              title: '海容物联网',
+              theme: tbTheme,
+              themeMode: ThemeMode.light,
+              darkTheme: tbDarkTheme,
+              home: MainDashboardPage(appRouter.tbContext,
+                  controller: _mainDashboardPageController),
+            )));
   }
-
 }

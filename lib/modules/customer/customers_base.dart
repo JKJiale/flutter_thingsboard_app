@@ -1,10 +1,9 @@
 import 'package:thingsboard_app/core/entity/entities_base.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
-mixin CustomersBase on EntitiesBase<Customer, PageLink>  {
-
+mixin CustomersBase on EntitiesBase<Customer, PageLink> {
   @override
-  String get title => 'Customers';
+  String get title => '客户'; //Customers
 
   @override
   String get noItemsFoundText => 'No customers found';
@@ -18,5 +17,4 @@ mixin CustomersBase on EntitiesBase<Customer, PageLink>  {
   void onEntityTap(Customer customer) {
     navigateTo('/customer/${customer.id!.id}');
   }
-
 }
